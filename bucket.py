@@ -19,23 +19,23 @@ class Bucket():
     def blitme(self):
         self.screen.blit(self.image,self.rect)
 
-    def update(self):
+    def update(self,ai_settings):
 
-        if self.moving_left == False and self.moving_right == False:
-            if self.t == 50:
-                self.t = random.randint(0,100)
-            if self.t>=50:
-                self.moving_left = True
-                self.t -= 1
-            else:
-                self.moving_right = True
-                self.t += 1
-            print(self.t)
+     #   if self.moving_left == False and self.moving_right == False:
+     #       if self.t == 50:
+     #           self.t = random.randint(0,100)
+     #       if self.t>=50:
+     #           self.moving_left = True
+     #           self.t -= 1
+     #       else:
+     #           self.moving_right = True
+     #           self.t += 1
+     #       print(self.t)
         if self.moving_right and self.rect.centerx<self.screen_rect.centerx*2 - self.rect[2]/2 :
-            self.rect.centerx += 1
+            self.rect.centerx += ai_settings.bucket_right
          #   print('right',self.t)
         elif self.moving_left and self.rect.centerx > self.rect[2]/2:
-            self.rect.centerx -= 1
+            self.rect.centerx -= ai_settings.bucket_left
          #   if self.moving_up and self.rect.bottom>self.rect[3]:
          #      self.rect.bottom -= 1
          #  elif self.moving_down and self.rect.bottom<self.screen_rect.bottom:

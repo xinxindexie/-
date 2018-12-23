@@ -17,16 +17,16 @@ class Ship():
     def blitme(self):
         self.screen.blit(self.image,self.rect)
 
-    def update(self):
+    def update(self,ai_settings):
         if self.moving_stop == False:
             if self.moving_right and self.rect.centerx<self.screen_rect.centerx*2 - self.rect[2]/2 :
-                self.rect.centerx += 1
+                self.rect.centerx += ai_settings.ship_right
             elif self.moving_left and self.rect.centerx > self.rect[2]/2:
-                self.rect.centerx -= 1
+                self.rect.centerx -= ai_settings.ship_left
             if self.moving_up and self.rect.bottom>self.rect[3]:
-                self.rect.bottom -= 1
+                self.rect.bottom -= ai_settings.ship_up
             elif self.moving_down and self.rect.bottom<self.screen_rect.bottom:
-                self.rect.bottom += 1
+                self.rect.bottom += ai_settings.ship_down
         if self.love :
             self.image = pygame.image.load('2.bmp')
         else:

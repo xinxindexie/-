@@ -37,6 +37,37 @@ def check_event(ship):
 
 
 '''
+def check_event_begin_game(ai_settings,text_bucket,text_plant,text_all):
+    temp = (ai_settings.screen_width - text_plant.get_size()[0] - text_bucket.get_size()[0] - text_all.get_size()[
+        0]) / (ai_settings.begin_game_text_number + 1)
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            #   ai_settings.begin_game_num = True
+            if event.key == pygame.K_1:
+                ai_settings.begin_game_num = 1
+            elif event.key == pygame.K_2:
+                ai_settings.begin_game_num = 2
+            elif event.key == pygame.K_3:
+                ai_settings.begin_game_num = 3
+            if event.key == pygame.K_ESCAPE:
+                sys.exit()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            x, y = event.pos
+            #   print("x=%d,y=%d",x,y)
+            if x > temp and x < temp + text_bucket.get_size()[ 0] and y > ai_settings.screen_height / 2 and \
+                    y < ai_settings.screen_height / 2 + text_bucket.get_size()[1]:
+                ai_settings.begin_game_num = 1
+            elif x > temp * 2 + text_bucket.get_size()[0] and x < temp * 2 + text_bucket.get_size()[0] + \
+                    text_plant.get_size()[0] and y > ai_settings.screen_height / 2 and y < ai_settings.screen_height / 2 + \
+                    text_bucket.get_size()[1]:
+                ai_settings.begin_game_num = 2
+            elif x > temp * 3 + text_bucket.get_size()[0] + text_plant.get_size()[0] and x < \
+                    temp * 3 + text_bucket.get_size()[0] + text_plant.get_size()[0] + text_all.get_size()[0] and \
+                    y > ai_settings.screen_height / 2 and y < ai_settings.screen_height / 2 + \
+                text_bucket.get_size()[1]:
+                ai_settings.begin_game_num = 3
+
+
 
 def check_event(ship,bucket):
     # respond to  keyboard and mouse item
@@ -90,33 +121,36 @@ def check_event(ship,bucket):
         bucket.moving_right = True
     else:
         bucket.moving_right = False
+    if pressed_key[pygame.K_ESCAPE]:
+        sys.exit()
 
 
 
-def update_screen(ai_settings,screen,ship,bullets,bucket,score):
+def update_screen(ai_settings,screen,ship,bullets,bucket):
     # fill color
     screen.fill(ai_settings.bg_color)
     for bullet in bullets.sprites():
-        if bullet.update():
+        if bullet.update(ai_settings):
             bullets.remove(bullet)
         bullet.image = pygame.transform.rotate(bullet.image,90)
         bullet.blitme()
     #   print(bullet.rect.bottom,bucket.rect.bottom-bucket.rect[3],bullet.rect.centerx,bucket.rect.centerx-bucket.rect[2],bucket.rect.centerx+bucket.rect[2] )
         if bullet.rect.bottom == bucket.rect.bottom-bucket.rect[3] and bullet.rect.centerx > bucket.rect.centerx-bucket.rect[2] and bullet.rect.centerx<bucket.rect.centerx+bucket.rect[2]:
-            score+=1
+            ai_settings.score+=1
             print(bullet.image.get_size())
+            if bullet.image.get_size()[0]>=50:
+                ai_settings.score+=4
     #print(score)
     ship.blitme()
     bucket.blitme()
     text = pygame.font.SysFont('宋体',100)
-    text_fmt = text.render(str(score),1,(255,255,0))
+    text_fmt = text.render(str(ai_settings.score),1,(255,255,0))
     screen.blit(text_fmt,(0,0))
 
 
 
     # visualiaze the window
     pygame.display.flip()
-    return score
 
 
 def update_screen1(ai_settings,screen,ship,bucket):

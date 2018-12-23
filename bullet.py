@@ -21,8 +21,8 @@ class Bullet(Sprite):
     def blitme(self):
         self.screen.blit(self.image,self.rect)
 
-    def update(self):
-        self.rect.bottom +=1
+    def update(self,ai_settings):
+        self.rect.bottom += ai_settings.bullet
         if self.rect.bottom > self.screen_rect.bottom+self.rect[3]:
             return True
 
