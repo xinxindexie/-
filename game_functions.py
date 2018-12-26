@@ -124,11 +124,41 @@ def check_event(ship,bucket):
     if pressed_key[pygame.K_ESCAPE]:
         sys.exit()
 
+def game_over(ai_settings,screen):
+    text = pygame.font.SysFont(ai_settings.over_game_textFont, ai_settings.over_game_textSize)
+    text_over_game = text.render(ai_settings.over_game_text, 1, ai_settings.over_game_textColor,
+                                 ai_settings.over_game_textBgColor)
+    screen.blit(text_over_game, (ai_settings.screen_width / 2 - text_over_game.get_size()[0] / 2,
+                                 ai_settings.screen_height / 2 - text_over_game.get_size()[1] / 2))
+    pygame.display.flip()
+    pygame.time.delay(30000)
 
 
-def update_screen(ai_settings,screen,ship,bullets,bucket):
+def update_screen(ai_settings,screen,ship,bullets,bucket,birds):
     # fill color
     screen.fill(ai_settings.bg_color)
+    x_1 = ship.rect.right
+    x_2 = ship.rect.left
+    y_1 = ship.rect.top
+    y_2 = ship.rect.bottom
+
+    if birds:
+        for bird in birds:
+            bird.update()
+            bird.blitme()
+            x_11 = bird.rect.right
+            x_22 = bird.rect.left
+            y_11 = bird.rect.top
+            y_22 = bird.rect.bottom
+
+        # 如果遇到鸟，无人机爆炸
+            if  y_1<y_22 and y_2>y_11 and x_1>x_22 and x_2<x_11:
+                ai_settings.health_point -= 1
+                birds.remove(bird)
+            elif bird.rect.centerx < 0 - bird.image.get_size()[0]/2:
+                birds.remove(bird)
+
+
     for bullet in bullets.sprites():
         if bullet.update(ai_settings):
             bullets.remove(bullet)
@@ -143,20 +173,47 @@ def update_screen(ai_settings,screen,ship,bullets,bucket):
     #print(score)
     ship.blitme()
     bucket.blitme()
-    text = pygame.font.SysFont('宋体',100)
-    text_fmt = text.render(str(ai_settings.score),1,(255,255,0))
+    text = pygame.font.SysFont(ai_settings.begin_game_textFont,30)
+    text_fmt = text.render("得分："+str(ai_settings.score),1,(255,255,0))
     screen.blit(text_fmt,(0,0))
+    text_health_point = text.render("生命值："+str(ai_settings.health_point),1,(255,0,0))
+    screen.blit(text_health_point,(0,30))
 
 
 
     # visualiaze the window
     pygame.display.flip()
 
-
-def update_screen1(ai_settings,screen,ship,bucket):
-    # fill color
-    screen.fill(ai_settings.bg_color)
-    ship.blitme()
-    bucket.blitme()
-    # visualiaze the window
-    pygame.display.flip()
+#与update_screen合并
+#def update_screen1(ai_settings,screen,ship,bucket,birds):
+#    # fill color
+#    screen.fill(ai_settings.bg_color)
+#    x_1 = ship.rect.right
+#    x_2 = ship.rect.left
+#    y_1 = ship.rect.top
+#    y_2 = ship.rect.bottom
+#
+#    if birds:
+#        for bird in birds:
+#            bird.update()
+#            bird.blitme()
+#            x_11 = bird.rect.right
+#            x_22 = bird.rect.left
+#            y_11 = bird.rect.top
+#            y_22 = bird.rect.bottom
+#            # 如果遇到鸟，无人机爆炸
+#            if y_1 < y_22 and y_2 > y_11 and x_1 > x_22 and x_2 < x_11:
+#                ai_settings.health_point -= 1
+#                birds.remove(bird)
+#            elif bird.rect.centerx < 0 - bird.image.get_size()[0] / 2:
+#                birds.remove(bird)
+#    ship.blitme()
+#    bucket.blitme()
+#
+#    text = pygame.font.SysFont(ai_settings.begin_game_textFont, 30)
+#    text_fmt = text.render("得分：" + str(ai_settings.score), 1, (255, 255, 0))
+#    screen.blit(text_fmt, (0, 0))
+#    text_health_point = text.render("生命值：" + str(ai_settings.health_point), 1, (255, 0, 0))
+#    screen.blit(text_health_point, (0, 30))
+#    # visualiaze the window
+#    pygame.display.flip()

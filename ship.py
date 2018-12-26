@@ -5,6 +5,7 @@ class Ship():
         self.screen = screen
 
         self.image = pygame.image.load('plane1.bmp')
+        self.image = pygame.transform.rotozoom(self.image,0,0.5)
         self.rect = self.image.get_rect()
         print(self.rect)
         self.screen_rect = screen.get_rect()
@@ -31,6 +32,7 @@ class Ship():
             self.image = pygame.image.load('2.bmp')
         else:
             self.image = pygame.image.load('plane1.bmp')
+            self.image = pygame.transform.rotozoom(self.image,0 ,0.5)
 
         self.top = self.rect.bottom
         self.topCenterx = self.rect.centerx

@@ -6,9 +6,12 @@ class Settings(object):
         self.screen_height = 600
         self.bg_color = (255,255,255)
         self.ball_lastT = 0
-        self.ball_interval = 500
+        self.ball_interval = 2000
+        self.bird_lastT = 0
+        self.bird_interval = 2000
         self.score = 0
         self.winScore = 5
+        self.health_point = 5
         self.scale = 50
         self.title = "ball"
 
@@ -24,7 +27,8 @@ class Settings(object):
         # 字体太大页面放不下
         self.begin_game_textSize_choose = 44
 
-        self.over_game_text = "恭喜你！胜利者！"
+        self.over_game_win_text = "恭喜你！胜利者！"
+        self.over_game_loss_text = "再接再厉！"
         self.over_game_textSize = 90
         self.over_game_textFont = "simsunnsimsun"
         self.over_game_textColor = (255, 0, 0)
